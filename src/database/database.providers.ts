@@ -8,13 +8,12 @@ export const databaseProviders = [
         type: 'mongodb',
         host: 'localhost',
         port: 27017,
-        database: 'test',
+        database: 'mongodb',
         entities: [
-            __dirname + '/./**/*.entity{.ts,.js}',
+            __dirname + './../**/*.entity{.ts,.js}',
         ],
         synchronize: true,
       });
-
       return dataSource.initialize();
     },
   },
