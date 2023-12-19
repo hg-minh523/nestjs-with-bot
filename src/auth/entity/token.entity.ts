@@ -1,23 +1,20 @@
 import {
-  Entity,
-  Column,
-  ObjectId,
   BaseEntity,
-  ObjectIdColumn,
+  Column,
   CreateDateColumn,
-  UpdateDateColumn,
   DeleteDateColumn,
+  Entity,
+  ObjectId,
+  ObjectIdColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 @Entity()
-export class RegitserTokenEntity extends BaseEntity {
+export class Token extends BaseEntity {
   @ObjectIdColumn()
   _id: ObjectId;
 
   @Column()
   token: string;
-
-  @Column()
-  exprired: string;
 
   @Column()
   userId: string;

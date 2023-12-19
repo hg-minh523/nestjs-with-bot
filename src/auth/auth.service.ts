@@ -1,36 +1,43 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
-import { userService } from 'src/user/user.service';
-import { AuthTokenService } from './authToken.service';
-import { loginDto } from './dto/login.dto';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { loginDto } from './dto/login.dto';
+import { CustomerService } from 'src/customer/customer.services';
+import { UserService } from 'src/users/users.service';
+
+console.log(CustomerService, UserService);
 @Injectable()
-export class authService {
+export class AuthService {
   constructor(
-    private readonly authTokenService: AuthTokenService,
-    private readonly userService: userService,
+    private readonly jwtService: JwtService,
+    @Inject(forwardRef(() => UserService))
+    private readonly userService: UserService,
   ) {}
-
   async login(loginDto: loginDto) {
-    try {
-      const user = await this.userService.findOne(loginDto.username);
-      const token = await this.authTokenService.createToken(user);
-      return {
-        accessToken: token,
-      };
-    } catch (error) {}
+    // try {
+    //   // const user = await this.userService.findByUsername(loginDto.username);
+    //   console.log(user);
+    //   if (!user) {
+    //     throw new UnauthorizedException('Can not find user');
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //   throw new BadGatewayException('Unthorization');
+    // }
   }
 
-  async logout() {
-    console.log(123);
+  validateUser(username: string) {
+    console.log(username);
   }
-  async hashpass(password: string) {
+
+  async hashpassword(password: string) {
+    console.log(password);
     const saltOrRounds = 10;
-    const hash = await bcrypt.hash(password, saltOrRounds);
+    const hash = bcrypt.hash(password, saltOrRounds);
     return hash;
   }
+
   async verifyPassword(password: string, hash: string) {
-    const isMatch = await bcrypt.compare(password, hash);
-    return isMatch;
+    return await bcrypt.compare(password, hash);
   }
 }
