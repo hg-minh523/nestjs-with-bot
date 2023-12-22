@@ -12,7 +12,6 @@ import { AuthService } from 'src/auth/auth.service';
 import { User } from './entity/users.entity';
 import { ObjectId } from 'mongodb';
 import { AuthTokenService } from 'src/token/token.service';
-console.log(AuthTokenService);
 
 @Injectable()
 export class UserService {
@@ -34,16 +33,16 @@ export class UserService {
       user.email = createUserDto.email;
       user.lastname = createUserDto.lastname;
       user.age = createUserDto.age;
-      // user.password = await this.authService.hashpassword(
-      //   createUserDto.password,
-      // );
+      user.password = await this.authService.hashpassword(
+        createUserDto.password,
+      );
       user.username = createUserDto.username;
-      const createdUser = this.userRepository.save(user);
-      const token = this.authTokenService.createRefreshToken(createdUser);
+      const newUser = await this.userRepository.save(user);
+      const token = this.authTokenService.createRefreshToken(newUser._id);
       if (!token) {
         throw new BadGatewayException('Create token false');
       }
-      return createdUser;
+      return newUser;
     } catch (error) {
       throw new BadGatewayException('Create user false');
     }
@@ -69,9 +68,9 @@ export class UserService {
       user.email = updateUserDto.email;
       user.lastname = updateUserDto.lastname;
       user.age = updateUserDto.age;
-      // user.password = await this.authService.hashpassword(
-      //   updateUserDto.password,
-      // );
+      user.password = await this.authService.hashpassword(
+        updateUserDto.password,
+      );
       return this.userRepository.update(updateUserDto.id, user);
     } catch (error) {
       throw new BadGatewayException('update user false');
@@ -85,7 +84,7 @@ export class UserService {
         _id: objectId,
       });
     } catch (error) {
-      throw new BadGatewayException('can not find user');
+      throw new BadGatewayException('Can not find user');
     }
   }
 
@@ -95,7 +94,7 @@ export class UserService {
         username: username,
       });
     } catch (error) {
-      throw new BadGatewayException('can not find user');
+      throw new BadGatewayException('Can not find user');
     }
   }
 
@@ -103,7 +102,7 @@ export class UserService {
     try {
       return this.userRepository.find();
     } catch (error) {
-      throw new BadGatewayException('can not find all user');
+      throw new BadGatewayException('Can not find all user');
     }
   }
 }

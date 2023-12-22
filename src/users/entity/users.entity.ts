@@ -33,6 +33,9 @@ export class User extends BaseEntity {
   age: number;
 
   @Column()
+  role: number;
+
+  @Column()
   password: string;
 
   @CreateDateColumn()

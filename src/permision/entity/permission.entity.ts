@@ -1,23 +1,24 @@
 import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
+  Column,
   ObjectId,
+  BaseEntity,
   ObjectIdColumn,
+  CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
+  PrimaryColumn,
 } from 'typeorm';
 @Entity()
-export class Token extends BaseEntity {
+export class Permission extends BaseEntity {
   @ObjectIdColumn()
   _id: ObjectId;
 
-  @Column()
-  token: string;
+  @PrimaryColumn()
+  code: string;
 
-  @ObjectIdColumn()
-  userId: ObjectId;
+  @Column()
+  name: string;
 
   @CreateDateColumn()
   createAt: Date;

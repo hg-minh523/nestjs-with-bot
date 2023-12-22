@@ -1,29 +1,44 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import {
+  BadGatewayException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+  forwardRef,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { loginDto } from './dto/login.dto';
-import { CustomerService } from 'src/customer/customer.services';
 import { UserService } from 'src/users/users.service';
+import { loginDto } from './dto/login.dto';
+import { AuthTokenService } from 'src/token/token.service';
 
-console.log(CustomerService, UserService);
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly jwtService: JwtService,
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
+    private readonly authTokenService: AuthTokenService,
   ) {}
   async login(loginDto: loginDto) {
-    // try {
-    //   // const user = await this.userService.findByUsername(loginDto.username);
-    //   console.log(user);
-    //   if (!user) {
-    //     throw new UnauthorizedException('Can not find user');
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   throw new BadGatewayException('Unthorization');
-    // }
+    try {
+      const user = await this.userService.findByUsername(loginDto.username);
+      if (!user) {
+        throw new UnauthorizedException('Can not find user');
+      }
+      const isMathPassword = await this.verifyPassword(
+        loginDto.password,
+        user.password,
+      );
+      if (!isMathPassword) {
+        throw new UnauthorizedException('Wrong password');
+      }
+      const refreshToken = await this.authTokenService.findByUser(user._id);
+      const accessToken = await this.authTokenService.createToken(user);
+      return {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      };
+    } catch (error) {
+      throw new BadGatewayException('Unthorization');
+    }
   }
 
   validateUser(username: string) {
@@ -31,7 +46,6 @@ export class AuthService {
   }
 
   async hashpassword(password: string) {
-    console.log(password);
     const saltOrRounds = 10;
     const hash = bcrypt.hash(password, saltOrRounds);
     return hash;

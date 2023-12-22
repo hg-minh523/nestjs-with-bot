@@ -9,7 +9,7 @@ import { AuthTokenService } from './token.service';
     JwtModule.register({
       global: true,
       secret: 'secret',
-      signOptions: { expiresIn: '60s' },
+      // signOptions: { expiresIn: '60s' },
     }),
   ],
   providers: [AuthTokenService, ...tokenProviders],
