@@ -4,14 +4,14 @@ import {
   Injectable,
   forwardRef,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
 import { createUserDto } from './dto/createUser.dto';
 import { updateUserDto } from './dto/updateUser.dto';
 
-import { AuthService } from 'src/auth/auth.service';
 import { User } from './entity/users.entity';
 import { ObjectId } from 'mongodb';
-import { AuthTokenService } from 'src/token/token.service';
+import { AuthService } from '../auth/auth.service';
+import { AuthTokenService } from '../token/token.service';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {

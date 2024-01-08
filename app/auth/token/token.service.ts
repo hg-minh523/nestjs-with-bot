@@ -1,8 +1,9 @@
 import { BadGatewayException, Inject, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
+
 import { Token } from './entity/token.entity';
 import { ObjectId } from 'mongodb';
+import { JwtService } from '@nestjs/jwt';
+import { Repository } from 'typeorm';
 @Injectable()
 export class AuthTokenService {
   constructor(

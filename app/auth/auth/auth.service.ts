@@ -6,9 +6,9 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UserService } from 'src/users/users.service';
+import { UserService } from '../users/users.service';
+import { AuthTokenService } from '../token/token.service';
 import { loginDto } from './dto/login.dto';
-import { AuthTokenService } from 'src/token/token.service';
 
 @Injectable()
 export class AuthService {

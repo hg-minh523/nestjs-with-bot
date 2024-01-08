@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { tokenProviders } from 'src/auth/entity/token.provider';
-import { DatabaseModule } from 'src/database/database.module';
+
 import { AuthTokenService } from './token.service';
+import { tokenProviders } from './entity/token.provider';
+import { DatabaseModule } from '../database/database.module';
 @Module({
   imports: [
     DatabaseModule,
